@@ -31,3 +31,6 @@ With it, you can control a Tello drone from your desktop/laptop using Python.
     $ python TelloRC.py
     
 - Note: You may have to add a '3' after pip and python commands if you have multiple python versions installed on your system.
+
+## Credits:
+Thanks to Damia Fuentes (GitHub @damiafuentes) for figuring out h.264 encoding/decoding in tello.py wrapper class!
