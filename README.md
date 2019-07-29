@@ -10,7 +10,7 @@ With it, you can control a Tello drone from your desktop/laptop using Python.
     
 ## Controls:
 - W,A,S,D: Forward, Backward, Left, Right
-- Up,Down,Left,Right Arrows: Up, Down, Rotate Left/Right
+- I,K,J,L Arrows: Up, Down, Rotate Left/Right
 - T: Takeoff
 - L/Q: Land and Exit
 - ESC: Emergency Motor Shutoff

@@ -4,15 +4,16 @@ import sys
 import cv2
 import numpy as np
 
+
 def intro():
     print("Welcome to the Tello RC app!")
     print("Before running this program, please ensure that you have python 3.6+, "
           "NumPy,\nand OpenCV-Python installed on your system.\n")
     print("Once you have looked over the controls, press any key + 'Enter' to continue or 'Q' to quit.\n")
     print("Here are the available controls:")
-    print("\tESC - Emergency Motor Shutoff.\n\tT - Takeoff.\n\tL or Q - Land/Exit.\n\tW - Forward.\n\tS - Backward"
-          "\n\tA - Left.\n\tD - Right.\n\tUp Arrow - Up.\n\tDown Arrow - Down.\n\t"
-          "Left Arrow - Rotate Left.\n\tRight Arrow - Rotate Right.\n\t1 - Set Low Speed."
+    print("\tESC - Emergency Motor Shutoff.\n\tT - Takeoff.\n\tQ - Land/Exit.\n\tW - Forward.\n\tS - Backward"
+          "\n\tA - Left.\n\tD - Right.\n\tI - Up.\n\tK - Down.\n\t"
+          "J - Rotate Left.\n\tL - Rotate Right.\n\t1 - Set Low Speed."
           "\n\t2 - Set Normal Speed.\n\t3 - Set High Speed.")
 
     usr_in = input("")
@@ -20,6 +21,7 @@ def intro():
         return False
     else:
         return True
+
 
 def initialize():
 
@@ -42,7 +44,7 @@ def initialize():
 
 
 if __name__ == "__main__":
-    
+
     # initial speed setting
     S = 30
 
@@ -87,11 +89,11 @@ if __name__ == "__main__":
         cv2.imshow("Tello Feed", frameRet)
 
         k = cv2.waitKey(40) & 0xFF
-        
+
         if k == ord('t'):
             t.takeoff(response=False)
             taken_off = True
-        
+
         if k == 27:
             print("Shutting down motors...")
             t.emergency()
@@ -117,6 +119,10 @@ if __name__ == "__main__":
                 S = 100
             else:
                 print("Speed already set to high")
+
+        if k == ord('q'):
+            control_on = False
+            t.land()
         
         if taken_off:
 
@@ -134,25 +140,25 @@ if __name__ == "__main__":
             else:
                 for_back_v = 0
 
-            if k == 82:
+            if k == ord('i'):
                 up_down_v = S
-            elif k == 84:
+            elif k == ord('k'):
                 up_down_v = -S
-            else: up_down_v = 0
+            else:
+                up_down_v = 0
 
-            if k == 81:
+            if k == ord('j'):
                 yaw_v = -S
-            elif k == 83:
+            elif k == ord('l'):
                 yaw_v = S
-            else: yaw_v = 0
+            else:
+                yaw_v = 0
 
-            if k == ord('q') or k == ord('l'):
+            if k == ord('q'):
                 control_on = False
                 t.land()
 
             t.send_rc_control(left_right_v, for_back_v, up_down_v, yaw_v, verbose=True)
-
-            # print("Velocity: ", str(left_right_v), str(for_back_v), str(up_down_v), str(yaw_v), str(k))
 
     cv2.destroyAllWindows
     t.end()

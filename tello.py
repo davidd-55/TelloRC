@@ -1,6 +1,7 @@
 """
 Helper file that defines certain interactions/commands with a DJI Tello drone.
-Also displays a video feed from Tello, all credit for this functionality goes to Damia Fuentes 
+Also displays a video feed from Tello, all credit for this functionality goes
+to Damia Fuentes
 Damia's GitHub - https://github.com/damiafuentes/DJITelloPy
 """
 
@@ -50,7 +51,8 @@ class Tello(object):
     def run_udp_receiver(self):
         # FROM DAMIA FUENTES -
         # Setup drone UDP receiver & listens for Tello response.
-        # Must be run from a background thread in order to not block the main thread.
+        # Must be run from a background thread in order to not
+        #  block the main thread.
         while True:
             try:
                 # buffer size is 1024 bytes
@@ -84,13 +86,14 @@ class Tello(object):
         # Returns: BackgroundFrameRead
 
         if self.background_frame_read is None:
-            self.background_frame_read = BackgroundFrameRead(self, self.get_udp_video_address()).start()
+            self.background_frame_read = BackgroundFrameRead(
+                self, self.get_udp_video_address()).start()
         return self.background_frame_read
 
     def stop_video_capture(self):
         return self.streamoff()
 
-    def send_command_response(self, message, counter=2, verbose=True):
+    def send_command_response(self, message, counter=5, verbose=True):
         # command to be sent to Tello
         # True if received, False otherwise
         self.clientSock.sendto(bytes(message, 'utf-8'), (self.UDP_IP,
@@ -115,9 +118,10 @@ class Tello(object):
             except socket.timeout:
                 if verbose:
                     print('timeout, recieved no data.')
-                return self.send_command_response(message, counter=counter-1, verbose=True)
+                return self.send_command_response(message, counter=counter-1,
+                                                  verbose=True)
 
-        #base case stops connection attempts and returns str
+        # base case stops connection attempts and returns str
         else:
             print("Aborting last command: '" + message + "'")
             return False
@@ -250,7 +254,7 @@ class Tello(object):
 
     #TODO: implement curve
 
-    def set_speed(self, x, response=True): 
+    def set_speed(self, x, response=True):
         # set speed to x cm/s
         # return T/F
 
@@ -261,9 +265,11 @@ class Tello(object):
 
     last_rtcmnd_sent = 0
 
-    def send_rc_control(self, left_right_velocity, forward_backward_velocity, up_down_velocity, yaw_velocity, verbose=False):
+    def send_rc_control(self, left_right_velocity, forward_backward_velocity,
+                        up_down_velocity, yaw_velocity, verbose=False):
         # Credit to Damia Fuentes for RealTime commands function
-        # Send RC control via four channels. Command is sent every self.TIME_BTW_RC_CONTROL_COMMANDS seconds.
+        # Send RC control via four channels. Command is sent every
+        # self.TIME_BTW_RC_CONTROL_COMMANDS seconds.
         # Arguments:
         #    left_right_velocity: -100~100 (left/right)
         #    forward_backward_velocity: -100~100 (forward/backward)
@@ -306,7 +312,7 @@ class Tello(object):
         # prints temp (C)
         # returns T/F
         return self.send_command_response("temperature?")
-    
+
     def get_attitude(self):
         # prints IMU data (pitch roll yaw)
         # returns T/F
@@ -329,9 +335,10 @@ class Tello(object):
 
 class BackgroundFrameRead:
     """
-    All credit for this class goes to Damia Fuentes @ https://github.com/damiafuentes/DJITelloPy
-    This class read frames from a VideoCapture in background. Then, just call backgroundFrameRead.frame to get the
-    actual one.
+    All credit for this class goes to Damia Fuentes
+    @ https://github.com/damiafuentes/DJITelloPy
+    This class read frames from a VideoCapture in background.
+    Then, just call backgroundFrameRead.frame to get the actual one.
     """
 
     def __init__(self, tello, address):
